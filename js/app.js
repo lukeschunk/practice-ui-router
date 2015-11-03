@@ -1,7 +1,26 @@
-var app = angular.module('nbaRoutes', ['ngRoute']);
+var app = angular.module('nbaRoutes', ['ui.router']);
 
-app.config(function($routeProvider, $httpProvider){
+app.config(function($stateProvider, $httpProvider, $urlRouterProvider){
   $httpProvider.interceptors.push('httpRequestInterceptor');
 
+    $stateProvider 
+    
+        .state('home', {
+            url: '/',
+            templateUrl: 'js/home/homeTmpl.html',
+            controller: 'homeCtrl'
+        })
+    
+        .state('teams', {
+            url: '/teams/:team',
+            templateUrl: 'js/teams/teamTmpl.html',
+            controller: 'teamCtrl',
+            resolve: {teamData: function(teamService, $stateParams) {
+                return teamService.getTeamData($stateParams.team); //whatever they select
+                    }
+            }
+        })
+    
+    $urlRouterProvider.otherwise('/');
   //router here
 });
